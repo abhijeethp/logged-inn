@@ -1,0 +1,198 @@
+<% include ../partials/header %>
+
+<div class="ui container">
+	<div class="row">
+		
+    <h1 style="text-align: center">Add A New Hotel</h1>
+		
+    <div style="width:30%; margin:25px auto">
+			<form action="/hotels" method="POST" accept-charset="utf-8" name="mForm" id="mForm">
+				
+        <div class="form-group row">
+					
+          <div class="col-xs-8">
+						<input class="form-control" type="text" name="hotel[Name]" placeholder="Name">
+					</div>
+
+					<div class="rating">
+  				  
+            <label>
+      				<input type="radio" name="hotel[Rating]" value="1" checked/>
+      				<span class="icon">★</span>
+    				</label>
+            
+            <% for(var i=2; i<=5; i++) { %>
+        			<label>
+        				<input type="radio" name="hotel[Rating]" value="<%=i%>" />
+                <% for(var j=0;j<i;j++) { %>
+        				  <span class="icon">★</span>
+                <% } %>
+      				</label>
+            <% } %>
+			  	
+          </div>
+
+				</div>
+				
+				<div class="form-group">
+					<input class="form-control" type="text" name="hotel[Logo]" placeholder="Image URL">
+				</div>
+				
+        <div class="form-group">
+					<textarea class="form-control" name ="hotel[Description]" rows="3" placeholder="Description"></textarea>
+				</div>
+				
+        <div class="form-group row">
+					<div id="map"></div>
+        </div>
+
+				<div class="form-group row">
+					<div id="room-service" class="col-xs-3 luxury"><i class="bell icon" title="Room Service"></i></div>
+					<div id="restaurant" class="col-xs-3 luxury"><i class="food icon"  title="Restaurant / Food-court"></i></div>
+					<div id="internet" class="col-xs-3 luxury"><i class="wifi icon"  title="Internet"></i></div>
+					<div id="gym" class="col-xs-3 luxury"><i class="heartbeat icon"  title="Gym / Fitness"></i></div>
+				</div>
+				
+        <div class="form-group">
+					<button class="btn btn-lg btn-primary btn-block">Add Hotel</button>
+				</div>
+
+			</form>
+    </div>
+	
+  </div>
+</div>
+
+<script>
+  var map, marker;
+	var roomService = false, restaurant = false, internet=false, gym=false;
+  function initMap() {
+    var geocoder = new google.maps.Geocoder();
+    var uluru = {
+      lat: 12.861259039000183,
+      lng: 77.66473955241634
+    };
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: uluru,
+      zoom: 17,
+			disableDefaultUI: true
+    });
+    map.addListener('click', function(event) {
+      placeMarker(event.latLng);  
+    });
+    marker = new google.maps.Marker({position: uluru, map: map});
+  }
+  
+  $("#mForm").submit(function(){
+		// append latitude
+    $('<input />').attr('type', 'hidden')
+        .attr('name', "hotel[Lat]")
+        .attr('value', marker.position.lat())
+        .appendTo("#mForm");
+		// append longitude
+    $('<input />').attr('type', 'hidden')
+        .attr('name', "hotel[Lng]")
+        .attr('value', marker.position.lng())
+        .appendTo("#mForm");
+		// append room-service
+		$('<input />').attr('type', 'hidden')
+        .attr('name', "hotel[RoomService]")
+        .attr('value', roomService ? 1 : 0)
+        .appendTo("#mForm");
+		// append restaurant 
+		$('<input />').attr('type', 'hidden')
+        .attr('name', "hotel[Restaurant]")
+        .attr('value', restaurant ? 1 : 0)
+        .appendTo("#mForm");
+		// append internet
+		$('<input />').attr('type', 'hidden')
+        .attr('name', "hotel[Internet]")
+        .attr('value', internet ? 1 : 0)
+        .appendTo("#mForm");
+		// append gym
+		$('<input />').attr('type', 'hidden')
+        .attr('name', "hotel[Gym]")
+        .attr('value', gym ? 1 : 0)
+        .appendTo("#mForm");
+    return true;
+  });
+
+	$("#room-service").click(function(){
+		roomService = !roomService;
+		if(roomService){
+			$("#room-service").css("color", "#f4e542");
+		} else {
+			$("#room-service").css("color", "#000000");
+		}
+	});
+
+	$("#restaurant").click(function(){
+		restaurant = !restaurant;
+		if(restaurant){
+			$("#restaurant").css("color", "#f4e542");
+		} else {
+			$("#restaurant").css("color", "#000000");
+		}
+	});
+
+	$("#internet").click(function(){
+		internet = !internet;
+		if(internet){
+			$("#internet").css("color", "#f4e542");
+		} else {
+			$("#internet").css("color", "#000000");
+		}
+	});
+
+	$("#gym").click(function(){
+		gym = !gym;
+		if(gym){
+			$("#gym").css("color", "#f4e542");
+		} else {
+			$("#gym").css("color", "#000000");
+		}
+	});
+  
+  function placeMarker(location) {
+    marker.setMap(null);
+    marker = new google.maps.Marker({
+        position: location, 
+        map: map
+    });
+    console.log(location.lng());
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDntCMXX2COhjt-C6ecCAHeDaqDLGR94Gs&callback=initMap" async defer></script>
+
+<style>
+  #map {
+    margin:auto;
+    height: 300px;
+    width: 300px;
+    background-color: grey;
+  }
+	.icon:hover{
+		color:#f4e542;
+	}
+
+	.luxury{
+		margin-top: 10px;
+	}
+
+	#room-service {
+		font-size: 30px;
+	}
+	
+	#restaurant {
+		font-size: 30px;
+	}
+	#internet {
+		font-size: 30px;
+	}
+	#gym {
+		font-size: 30px;
+	}
+	
+</style>
+
+<% include ../partials/footer %>

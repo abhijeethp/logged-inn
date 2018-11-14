@@ -1,0 +1,149 @@
+<% include ./partials/header %>
+<div class="container">
+
+  <p class="script"><span>Welcome to</span></p>
+  <p class="shadow text2">LOGGED.INN</p>
+  <p class="script"><span>Abhijeeth Padarthi - Abhishek Konkal</span></p>
+  
+  
+<div id="map"></div>
+<p id="maphint" class="text4">locate area to find hotels</p>
+<form id="submitLocationForm" name="submitLocationForm" action="/" method="POST" >
+  <input type="submit" name="submit" />
+</form>
+<script>
+  var map, marker;
+  function initMap() {
+    var geocoder = new google.maps.Geocoder();
+    var uluru = {
+      lat: 12.861259039000183,
+      lng: 77.66473955241634
+    };
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: uluru,
+      zoom: 17
+    });
+    map.addListener('click', function(event) {
+      placeMarker(event.latLng);  
+    });
+    marker = new google.maps.Marker({position: uluru, map: map});
+  }
+  
+  $("#submitLocationForm").submit(function(){
+    $('<input />').attr('type', 'hidden')
+        .attr('name', "lat")
+        .attr('value', marker.position.lat())
+        .appendTo("#submitLocationForm");
+    $('<input />').attr('type', 'hidden')
+        .attr('name', "lng")
+        .attr('value', marker.position.lng())
+        .appendTo("#submitLocationForm");
+    return true;
+  }); 
+  
+  function placeMarker(location) {
+    marker.setMap(null);
+    marker = new google.maps.Marker({
+        position: location, 
+        map: map
+    });
+    console.log(location.lat());
+    console.log(location.lng());
+
+  }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDntCMXX2COhjt-C6ecCAHeDaqDLGR94Gs&callback=initMap" async defer></script>
+
+  
+
+<style type="text/css">
+
+  @import url(https://fonts.googleapis.com/css?family=Arvo:700);
+  @import url(https://fonts.googleapis.com/css?family=Seaweed+Script);
+  
+  body {  
+    background: url('https://hitswallpapers.co/wp-content/uploads/2018/10/beijing-at-night-china-wallpapers-best-of-wallpaper-1080p-page-1-of-beijing-at-night-china-wallpapers.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    font-family: Arial;
+    font-weight: 800;
+  }
+
+  .shadow {
+    color: #fff;
+    font-family: Arvo;
+    font-weight: bold;
+    text-shadow:
+      -3px -3px 0 #fff,
+      3px -3px 0 #fff,
+      -3px 3px 0 #fff,
+      3px 3px 0 #fff,
+      4px 4px 0 #000,
+      5px 5px 0 #000,
+      6px 6px 0 #000,
+      7px 7px 0 #000;
+    line-height: 0.8em;
+    letter-spacing: 0.1em;
+    transform: scaleY(0.7);
+    -webkit-transform: scaleY(0.7);
+    -moz-transform: scaleY(0.7);
+    margin:0;
+    text-align: center;
+  } 
+
+  .script {
+    font-family: "Seaweed Script";
+    color: #000;
+    text-align: center;
+    font-size: 40px;
+    position: relative;
+    margin:0;
+  }
+
+  .script span {
+    background-color: rgba(0,0,0,0);
+    color: #fff;
+    padding: 0 0.3em;
+  }
+
+  .script:before {
+    content:"";
+    display: block;
+    position: absolute;
+    z-index:-1;
+    top: 50%;
+    width: 100%;
+    margin:auto;
+    border-bottom: 3px solid rgba(255,255,255,1);
+  }
+
+  .text1 {
+    font-size: 60px;
+  }
+
+  .text2 {
+    font-size: 150px;
+    color:#FFF;
+  }
+
+  .text3 {
+    font-size: 100px;
+  }
+
+  #map {
+    margin:auto;
+    height: 350px;
+    width: 350px;
+    background-color: grey;
+  }
+
+  #maphint {
+    color: #FFF;
+    margin: auto;
+  }
+
+</style>
+
+<% include ./partials/footer %>

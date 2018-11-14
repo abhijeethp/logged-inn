@@ -1,0 +1,89 @@
+<% include ../partials/header %>
+
+<div class="container my_container">
+  
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1><i class="marker icon"></i>We found <%=hotels.length%> hotels! :D</h1>
+      <% if(currentUser) { %>
+        <p>
+          <a href="/hotels/new" class="large ui teal button">Add new hotel</a>
+        </p>
+      <% } %>
+    </div>
+  </div>
+    
+ 
+  <div class="ui row link red divided cards" >
+    <% hotels.forEach( function(element, index) { %>
+      <a class="card" href="/hotels/<%=element.Hotel_id%>">
+      <div class="image">
+       <img src="<%=element.Hotel_logo%>">
+      </div>
+      <div class="content">
+        <div class="header"><%=element.Hotel_name%></div>
+          <div class="meta">
+            <p>
+              <% element.suiteNames.forEach( function(suiteName, index) { %>
+                <%=suiteName.Suite_name%>,
+              <% }); %>
+            </p>
+          </div>
+        <div class="description">
+          <%=element.Hotel_description%>
+        </div>
+      </div>
+      <div class="extra content">
+        <span class="right floated">
+          Rating: <%=element.Hotel_rating%>
+        </span>
+        <span>
+          <i class="comment icon"></i>
+          <%=element.noOfReviews%>
+        </span>
+
+        
+        <span>
+          <% if(element.Hotel_room_service == 1) { %>
+            <i class="bell icon" style="color:green" title="Room Service provided"></i>
+          <% } else { %>
+            <i class="bell icon" title="Room Service not provided"></i>
+          <% } %>
+        </span>
+        <span>
+          <% if(element.Hotel_restaurant == 1) { %>
+            <i class="food icon" style="color:green" title="Hotel has restaurant / canteen"></i>
+          <% } else { %>
+            <i class="food icon" title="Hotel does not have restaurant / canteen"></i>
+          <% } %>
+        </span>
+
+        <span>
+          <% if(element.Hotel_internet == 1) { %>
+            <i class="wifi icon" style="color:green" title="Hotel provides internet"></i>
+          <% } else { %>
+            <i class="wifi icon" title="Hotel does not provide internet"></i>
+          <% } %>
+        </span>
+
+        <span>
+          <% if(element.Hotel_gym == 1) { %>
+            <i class="heartbeat icon" style="color:green" title="Hotel has a gym / fitness centre"></i>
+          <% } else { %>
+            <i class="heartbeat icon" title="Hotel does not have a gym / fitness centre"></i>
+          <% } %>
+        </span>
+
+      </div>
+      </a>
+    <% }); %>
+  </div>
+</div>
+
+<style>
+  .my_container{
+    width:82%;
+  }
+</style>
+
+<% include ../partials/footer %>
