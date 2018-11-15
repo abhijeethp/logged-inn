@@ -30,7 +30,9 @@ CREATE TABLE hotel (
 	Hotel_room_service BOOLEAN NOT NULL,
 	Hotel_restaurant BOOLEAN NOT NULL,
 	Hotel_internet BOOLEAN NOT NULL,
-	Hotel_gym BOOLEAN NOT NULL
+	Hotel_gym BOOLEAN NOT NULL,
+	Hotel_pool BOOLEAN NOT NULL,
+	Hotel_doctor BOOLEAN NOT NULL
 );
 
 CREATE TABLE suite (

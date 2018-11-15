@@ -47,10 +47,12 @@
         </div>
 
 				<div class="form-group row">
-					<div id="room-service" class="col-xs-3 luxury"><i class="bell icon" title="Room Service"></i></div>
-					<div id="restaurant" class="col-xs-3 luxury"><i class="food icon"  title="Restaurant / Food-court"></i></div>
-					<div id="internet" class="col-xs-3 luxury"><i class="wifi icon"  title="Internet"></i></div>
-					<div id="gym" class="col-xs-3 luxury"><i class="heartbeat icon"  title="Gym / Fitness"></i></div>
+					<div id="room-service" class="col-xs-2 luxury"><i class="bell icon" title="Room Service"></i></div>
+					<div id="restaurant" class="col-xs-2 luxury"><i class="food icon"  title="Restaurant / Food-court"></i></div>
+					<div id="internet" class="col-xs-2 luxury"><i class="wifi icon"  title="Internet"></i></div>
+					<div id="gym" class="col-xs-2 luxury"><i class="fas fa-dumbbell"  title="Gym / Fitness"></i></div>
+					<div id="pool" class="col-xs-2 luxury"><i class="fas fa-swimmer" title="Swimming Pool"></i></div>
+					<div id="doctor" class="col-xs-2 luxury"><i class="fas fa-user-md" title="inhouse doctor"></i></div>
 				</div>
 				
         <div class="form-group">
@@ -65,7 +67,7 @@
 
 <script>
   var map, marker;
-	var roomService = false, restaurant = false, internet=false, gym=false;
+	var roomService = false, restaurant = false, internet=false, gym=false, pool=false, doctor=false;
   function initMap() {
     var geocoder = new google.maps.Geocoder();
     var uluru = {
@@ -114,42 +116,68 @@
         .attr('name', "hotel[Gym]")
         .attr('value', gym ? 1 : 0)
         .appendTo("#mForm");
+		$('<input />').attr('type', 'hidden')
+        .attr('name', "hotel[Pool]")
+        .attr('value', pool ? 1 : 0)
+        .appendTo("#mForm");
+		$('<input />').attr('type', 'hidden')
+        .attr('name', "hotel[Doctor]")
+        .attr('value', doctor ? 1 : 0)
+        .appendTo("#mForm");
     return true;
   });
 
 	$("#room-service").click(function(){
 		roomService = !roomService;
 		if(roomService){
-			$("#room-service").css("color", "#f4e542");
+			$("#room-service").css("color", "green");
 		} else {
-			$("#room-service").css("color", "#000000");
+			$("#room-service").css("color", "grey");
 		}
 	});
 
 	$("#restaurant").click(function(){
 		restaurant = !restaurant;
 		if(restaurant){
-			$("#restaurant").css("color", "#f4e542");
+			$("#restaurant").css("color", "green");
 		} else {
-			$("#restaurant").css("color", "#000000");
+			$("#restaurant").css("color", "grey");
 		}
 	});
 
 	$("#internet").click(function(){
 		internet = !internet;
 		if(internet){
-			$("#internet").css("color", "#f4e542");
+			$("#internet").css("color", "green");
 		} else {
-			$("#internet").css("color", "#000000");
+			$("#internet").css("color", "grey");
 		}
 	});
 
 	$("#gym").click(function(){
 		gym = !gym;
 		if(gym){
-			$("#gym").css("color", "#f4e542");
+			$("#gym").css("color", "green");
 		} else {
-			$("#gym").css("color", "#000000");
+			$("#gym").css("color", "grey");
+		}
+	});
+
+	$("#pool").click(function(){
+		pool = !pool;
+		if(pool){
+			$("#pool").css("color", "green");
+		} else {
+			$("#pool").css("color", "grey");
+		}
+	});
+
+	$("#doctor").click(function(){
+		doctor = !doctor;
+		if(doctor){
+			$("#doctor").css("color", "green");
+		} else {
+			$("#doctor").css("color", "grey");
 		}
 	});
   
@@ -171,28 +199,16 @@
     width: 300px;
     background-color: grey;
   }
-	.icon:hover{
-		color:#f4e542;
+
+	.luxury:hover {
+		color:green;		
 	}
 
 	.luxury{
 		margin-top: 10px;
-	}
-
-	#room-service {
 		font-size: 30px;
+		color:grey;
 	}
-	
-	#restaurant {
-		font-size: 30px;
-	}
-	#internet {
-		font-size: 30px;
-	}
-	#gym {
-		font-size: 30px;
-	}
-	
 </style>
 
 <% include ../partials/footer %>

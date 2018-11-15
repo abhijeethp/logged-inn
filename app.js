@@ -215,12 +215,14 @@ app.post("/hotels", isLoggedIn, function (req, res) {
 	var restaurant = req.body.hotel.Restaurant;
 	var internet = req.body.hotel.Internet;
 	var gym = req.body.hotel.Gym;
+	var pool = req.body.hotel.Pool;
+	var doctor = req.body.hotel.Doctor;
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if (err1) { console.log(err1); } 
 		else {
-			var values = [[Name, Logo, Description, Rating, lat, lng, roomService, restaurant, internet, gym]];
-			var queryFields = "Hotel_name, Hotel_logo, Hotel_description, Hotel_rating, Hotel_latitude, Hotel_longitude, Hotel_room_service, Hotel_restaurant, Hotel_internet, Hotel_gym";
+			var values = [[Name, Logo, Description, Rating, lat, lng, roomService, restaurant, internet, gym, pool, doctor]];
+			var queryFields = "Hotel_name, Hotel_logo, Hotel_description, Hotel_rating, Hotel_latitude, Hotel_longitude, Hotel_room_service, Hotel_restaurant, Hotel_internet, Hotel_gym, Hotel_pool, Hotel_doctor";
 			var query = "INSERT INTO hotel(" + queryFields + ") VALUES ?";
 			connection.query(query, [values], function (err2, result, fields) {
 				if(err2) { console.log(err2); } 

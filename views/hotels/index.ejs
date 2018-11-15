@@ -43,22 +43,22 @@
         </span>
 
         
-        <span>
+        <span class="luxury">
           <% if(element.Hotel_room_service == 1) { %>
             <i class="bell icon" style="color:green" title="Room Service provided"></i>
           <% } else { %>
             <i class="bell icon" title="Room Service not provided"></i>
           <% } %>
         </span>
-        <span>
+        <span class="luxury">
           <% if(element.Hotel_restaurant == 1) { %>
             <i class="food icon" style="color:green" title="Hotel has restaurant / canteen"></i>
           <% } else { %>
             <i class="food icon" title="Hotel does not have restaurant / canteen"></i>
           <% } %>
         </span>
-
-        <span>
+        
+        <span class="luxury">
           <% if(element.Hotel_internet == 1) { %>
             <i class="wifi icon" style="color:green" title="Hotel provides internet"></i>
           <% } else { %>
@@ -66,11 +66,27 @@
           <% } %>
         </span>
 
-        <span>
+        <span class="luxury">
           <% if(element.Hotel_gym == 1) { %>
-            <i class="heartbeat icon" style="color:green" title="Hotel has a gym / fitness centre"></i>
+            <i class="fas fa-dumbbell" style="color:green" title="Hotel has a gym / fitness centre"></i>
           <% } else { %>
-            <i class="heartbeat icon" title="Hotel does not have a gym / fitness centre"></i>
+            <i class="fas fa-dumbbell" title="Hotel does not have a gym / fitness centre"></i>
+          <% } %>
+        </span>
+
+        <span class="luxury">
+          <% if(element.Hotel_pool == 1) { %>
+            <i class="fas fa-swimmer" style="color:green" title="Hotel has a gym / fitness centre"></i>
+          <% } else { %>
+            <i class="fas fa-swimmer" title="Hotel does not have a gym / fitness centre"></i>
+          <% } %>
+        </span>
+
+        <span class="luxury">
+          <% if(element.Hotel_doctor == 1) { %>
+            <i class="fas fa-user-md" style="color:green" title="Hotel has a gym / fitness centre"></i>
+          <% } else { %>
+            <i class="fas fa-user-md" title="Hotel does not have a gym / fitness centre"></i>
           <% } %>
         </span>
 
@@ -83,6 +99,10 @@
 <style>
   .my_container{
     width:82%;
+  }
+
+  .luxury{
+    margin-left:5px;
   }
 </style>
 
