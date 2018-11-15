@@ -24,8 +24,8 @@
         <div class="header"><%=element.Hotel_name%></div>
           <div class="meta">
             <p>
-              <% element.suiteNames.forEach( function(suiteName, index) { %>
-                <%=suiteName.Suite_name%>,
+              <% element.categoryNames.forEach( function(categoryName, index) { %>
+                <%=categoryName.Category_name%>,
               <% }); %>
             </p>
           </div>
@@ -35,7 +35,12 @@
       </div>
       <div class="extra content">
         <span class="right floated">
-          Rating: <%=element.Hotel_rating%>
+          <% for(var i=0; i<element.Hotel_rating; i++) {%>
+						<span style="color:#f4e542">★</span>
+					<% } %>
+					<% for(var i=0; i<(5-element.Hotel_rating); i++) { %>
+						<span>★</span>
+					<% } %>
         </span>
         <span>
           <i class="comment icon"></i>
@@ -46,47 +51,36 @@
         <span class="luxury">
           <% if(element.Hotel_room_service == 1) { %>
             <i class="bell icon" style="color:green" title="Room Service provided"></i>
-          <% } else { %>
-            <i class="bell icon" title="Room Service not provided"></i>
           <% } %>
         </span>
+
         <span class="luxury">
           <% if(element.Hotel_restaurant == 1) { %>
             <i class="food icon" style="color:green" title="Hotel has restaurant / canteen"></i>
-          <% } else { %>
-            <i class="food icon" title="Hotel does not have restaurant / canteen"></i>
           <% } %>
         </span>
         
         <span class="luxury">
           <% if(element.Hotel_internet == 1) { %>
             <i class="wifi icon" style="color:green" title="Hotel provides internet"></i>
-          <% } else { %>
-            <i class="wifi icon" title="Hotel does not provide internet"></i>
           <% } %>
         </span>
 
         <span class="luxury">
           <% if(element.Hotel_gym == 1) { %>
             <i class="fas fa-dumbbell" style="color:green" title="Hotel has a gym / fitness centre"></i>
-          <% } else { %>
-            <i class="fas fa-dumbbell" title="Hotel does not have a gym / fitness centre"></i>
           <% } %>
         </span>
 
         <span class="luxury">
           <% if(element.Hotel_pool == 1) { %>
             <i class="fas fa-swimmer" style="color:green" title="Hotel has a gym / fitness centre"></i>
-          <% } else { %>
-            <i class="fas fa-swimmer" title="Hotel does not have a gym / fitness centre"></i>
           <% } %>
         </span>
 
         <span class="luxury">
           <% if(element.Hotel_doctor == 1) { %>
             <i class="fas fa-user-md" style="color:green" title="Hotel has a gym / fitness centre"></i>
-          <% } else { %>
-            <i class="fas fa-user-md" title="Hotel does not have a gym / fitness centre"></i>
           <% } %>
         </span>
 
@@ -99,10 +93,6 @@
 <style>
   .my_container{
     width:82%;
-  }
-
-  .luxury{
-    margin-left:5px;
   }
 </style>
 

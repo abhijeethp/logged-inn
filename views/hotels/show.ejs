@@ -6,13 +6,13 @@
 		<div class="rlogo ui centered row"><img class="ui medium rounded image" src="<%=restaurant.Logo%>"></div>
 		<div class="ui centered row">
 			<div class="ui centered segment vertically divided grid">
-				<div class="ui centered row"><h1><%=restaurant.Name%></h1></div>
-				<div class="ui centered row"><p><%=restaurant.Description%></p></div>
+				<div class="ui centered row"><h1><%=hotel.Name%></h1></div>
+				<div class="ui centered row"><p><%=hotel.Hotel_description%></p></div>
 				<div class="ui centered row">
-					<% for(var i=0; i<restaurant.Rating; i++) {%>
+					<% for(var i=0; i<hotel.Hotel_rating; i++) {%>
 						<span class="fa fa-star checked"></span>
 					<% } %>
-					<% for(var i=0; i<(5-restaurant.Rating); i++) { %>
+					<% for(var i=0; i<(5-hotel.Hotel_rating); i++) { %>
 						<span class="fa fa-star"></span>
 					<% } %>
 				</div>
@@ -27,18 +27,18 @@
 
 <div class="ui main text segment container">
 	
-	<% restaurant.menus.forEach( function(menu, index1) { %>
+	<% hotel.categories.forEach( function(category, index1) { %>
 		<h3 class="ui dividing header">
-	 		<%=menu.Menu_name%>
+	 		<%=category.Category_name%>
 			
 			<% if(currentUser) { %>
 				
-				<form action="/restaurants/<%=restaurant.Restaurant_id%>/menus/<%=menu.Menu_id%>/menu_items/new" method="GET" style="display:inline">
-	 				<button class="ui green button">ADD NEW ITEM</button>
+				<form action="/hotels/<%=hotel.Hotel_id%>/categories/<%=category.Category_id%>/rooms/new" method="GET" style="display:inline">
+	 				<button class="ui green button">ADD NEW ROOM</button>
 	 			</form>
 
-	 			<form action="/restaurants/<%=restaurant.Restaurant_id%>/menus/<%=menu.Menu_id%>?_method=DELETE" method="POST" style="display:inline">
-	 				<button class="ui red button">DELETE MENU</button>
+	 			<form action="/hotels/<%=hotel.Hotel_id%>/categories/<%=category.Category_id%>?_method=DELETE" method="POST" style="display:inline">
+	 				<button class="ui red button">DELETE CATEGORY</button>
 	 			</form>
 	 		<% } %>
 
@@ -47,7 +47,7 @@
 		<div class="ui top attached segment">
 			<div class="ui divided items">
 
-				<% menu.menuItems.forEach( function(menuItem, index2) { %>
+				<% category.rooms.forEach( function(room, index2) { %> // TODO - work from here
 					<div class="item">
 						
 						<div class="ui small image">

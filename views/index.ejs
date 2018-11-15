@@ -32,11 +32,11 @@
   $("#submitLocationForm").submit(function(){
     $('<input />').attr('type', 'hidden')
         .attr('name', "lat")
-        .attr('value', marker.position.lat())
+        .attr('value', marker.position.lat().toFixed(4))
         .appendTo("#submitLocationForm");
     $('<input />').attr('type', 'hidden')
         .attr('name', "lng")
-        .attr('value', marker.position.lng())
+        .attr('value', marker.position.lng().toFixed(4))
         .appendTo("#submitLocationForm");
     return true;
   }); 

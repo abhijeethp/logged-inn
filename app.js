@@ -151,7 +151,7 @@ app.get("/hotels/:lat/:lng", function (req, res) {
 		if (err1) { console.log(err1); } 
 		else {
 			var query1 = "select * from hotel where Hotel_latitude > " + (lat - 0.05) +" and Hotel_latitude < "+(lat+0.05);
-			query1 += " and Hotel_longitude > " + (lng - 0.05) + "and Hotel_longitude < "+(lng + 0.05);
+			query1 += " and Hotel_longitude > " + (lng - 0.05) + " and Hotel_longitude < "+(lng + 0.05);
 			connection.query(query1, function (err2, hotels, fields) {
 				
 				if (err2) { console.log(err2); } 
@@ -159,11 +159,11 @@ app.get("/hotels/:lat/:lng", function (req, res) {
 					
 					forEach(hotels, function(hotel, index) {
 
-						var query2 = "SELECT Suite_name FROM suite WHERE Hotel_id = "+hotel.Hotel_id;
-						connection.query(query2, function (err3, suiteNames, index) {
+						var query2 = "SELECT Category_name FROM category WHERE Hotel_id = "+hotel.Hotel_id;
+						connection.query(query2, function (err3, categoryNames, index) {
 							if (err3) { console.log(err3); }
 							else{
-								hotel.suiteNames = suiteNames;
+								hotel.categoryNames = categoryNames;
 								semiFinalHotels.push(hotel);
 							}
 						});
@@ -237,45 +237,45 @@ app.post("/hotels", isLoggedIn, function (req, res) {
 });
 
 // SHOW - shows more information about one restaurants 
-app.get("/restaurants/:id", function (req, res) {
+app.get("/hotels/:id", function (req, res) {
 	
-	restaurantId = req.params.id;
+	hotelId = req.params.id;
 
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if (err1) { console.log(err1); } 
 		else {
-			var query1 = "SELECT * FROM restaurant where Restaurant_id = "+restaurantId;
-			connection.query(query1, function (err2, restaurant, fields1) {
+			var query1 = "SELECT * FROM hotel where Hotel_id = "+hotelId;
+			connection.query(query1, function (err2, hotel, fields1) {
 				
 				if (err2) { console.log(err2); } 
 				else {
-					restaurant = restaurant[0];
+					hotel = hotel[0];
 					
-					var query2 = "SELECT * FROM menu WHERE Restaurant_id = " + restaurant.Restaurant_id;
-					connection.query(query2, function (err3, menus, fields2) {
+					var query2 = "SELECT * FROM category WHERE Hotel_id = " + hotel.Hotel_id;
+					connection.query(query2, function (err3, categories, fields2) {
 						if(err3) { console.log(err3); }
 						else{
-							restaurant.menus = menus;
-							forEach(restaurant.menus, function (menu, index) {
+							hotel.categories = categories;
+							forEach(hotel.categories, function (category, index) {
 								
-								var query3 = "SELECT * FROM menu_item WHERE Menu_id = " + menu.Menu_id;
-								connection.query(query3, function (err4, menuItems, fields3) {
+								var query3 = "SELECT * FROM room WHERE Category_id = " + category.Category_id;
+								connection.query(query3, function (err4, rooms, fields3) {
 									if (err4) { console.log(err4) } else {
-											restaurant.menus[index].menuItems = menuItems;
+											hotel.categories[index].rooms = rooms;
 										}	
 								});
 								var done = this.async();
 								setTimeout(done, 50);
 							}, function (notAborted) {
 								
-								var query4 = "SELECT r.*,DATE_FORMAT(r.Review_date,'%d/%m/%Y') AS niceDate, u.Fname  FROM review r, USER u WHERE r.Restaurant_id = "+restaurant.Restaurant_id+" and r.User_id = u.User_id";
+								var query4 = "SELECT r.*,DATE_FORMAT(r.Review_date,'%d/%m/%Y') AS niceDate, u.Fname  FROM review r, USER u WHERE r.Hotel_id = "+hotel.Hotel_id+" and r.User_id = u.User_id";
 								connection.query(query4, function (err5, reviews, fields4) {
 									if (err5) { console.log(err5) } else {
-										restaurant.reviews = reviews;
-										console.log(JSON.stringify(restaurant));
+										hotel.reviews = reviews;
+										console.log(JSON.stringify(hotel));
 										connection.end();
-										res.render("restaurants/show", {restaurant:restaurant});
+										res.render("hotels/show", {hotel:hotel});
 									}
 								});
 							});
@@ -287,25 +287,24 @@ app.get("/restaurants/:id", function (req, res) {
 	});
 });
 
-// =================
+// =================x
 //   REVIEWS ROUTES
-// =================
+// =================x
 
 // NEW - form to create a new review for the particular restaurant
-app.get("/restaurants/:id/reviews/new", isLoggedIn, function (req, res) {
+app.get("/hotels/:id/reviews/new", isLoggedIn, function (req, res) {
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if (err1) { console.log("1"+err1); } 
 		else {
-			var query = "SELECT * FROM restaurant WHERE Restaurant_id = "+req.params.id;
-			connection.query(query, function (err2, Restaurants, fields) {
+			var query = "SELECT * FROM hotel WHERE Hotel_id = "+req.params.id;
+			connection.query(query, function (err2, hotels, fields) {
 				if (err2) { console.log(err2); } else {
-					if(Restaurants.length<=0){
-						res.send("restaurant does not exist");
+					if(hotels.length<=0){
+						res.send("hotel does not exist");
 					} else {
-						console.log(Restaurants[0]);
 						connection.end();
-						res.render("reviews/new",{restaurant:Restaurants[0], user: req.session.user});
+						res.render("reviews/new",{hotel:hotels[0], user: req.session.user});
 					}
 				}
 			});
@@ -314,25 +313,25 @@ app.get("/restaurants/:id/reviews/new", isLoggedIn, function (req, res) {
 });
 
 // CREATE - creates a new review
-app.post("/restaurants/:id/reviews", isLoggedIn, function (req, res) {
+app.post("/hotels/:id/reviews", isLoggedIn, function (req, res) {
 	
 	var Review = req.body.review.Review;
 	var Rating = req.body.review.Rating;
 	var UserId = req.session.user.User_id;
-	var RestaurantId = req.params.id;
+	var hotelId = req.params.id;
 	
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if (err1) { console.log(err1); } 
 		else {
 			
-			var queryFields = "Review_date, Review, Rating, User_id, Restaurant_id";
-			var query = "INSERT INTO review("+queryFields+") VALUES (CURDATE(), '"+Review+"', "+Rating+", "+UserId+", "+RestaurantId+")";
+			var queryFields = "Review_date, Review_text, Review_rating, User_id, Hotel_id";
+			var query = "INSERT INTO review("+queryFields+") VALUES (CURDATE(), '"+Review+"', "+Rating+", "+UserId+", "+hotelId+")";
 			connection.query(query, function (err2, results, fields) {
 				if (err2) { console.log(err2); } else {
 					console.log("review created");
 					connection.end();
-					res.redirect("/restaurants/"+RestaurantId);
+					res.redirect("/hotels/"+hotelId);
 				}
 			});
 		}
@@ -343,23 +342,22 @@ app.post("/restaurants/:id/reviews", isLoggedIn, function (req, res) {
 //   MENU ROUTES
 // ================
 
-// NEW - form to create a new menu for the particular restaurant
-app.get("/restaurants/:id/menus/new", isLoggedIn, function (req, res) {
+// NEW - form to create a new category for the particular hotel
+app.get("/hotels/:id/categories/new", isLoggedIn, function (req, res) {
 	
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if (err1) { console.log(err1); } 
 		else {
 			
-			var query = "SELECT * FROM restaurant WHERE Restaurant_id = "+req.params.id;
-			connection.query(query, function (err2, Restaurants, fields) {
+			var query = "SELECT * FROM hotel WHERE Hotel_id = "+req.params.id;
+			connection.query(query, function (err2, hotels, fields) {
 				if (err2) { console.log(err2); } else {
-					if(Restaurants.length<=0){
-						res.send("restaurant does not exist");
+					if(hotels.length<=0){
+						res.send("hotel does not exist");
 					} else {
-						console.log(Restaurants[0]);
 						connection.end();
-						res.render("menus/new",{restaurant:Restaurants[0]});
+						res.render("categories/new",{hotel:hotels[0]});
 					}
 				}
 			});
@@ -367,8 +365,8 @@ app.get("/restaurants/:id/menus/new", isLoggedIn, function (req, res) {
 	});
 });
 
-// CREATE - creates a new menu
-app.post("/restaurants/:id/menus", isLoggedIn, function (req, res) {
+// CREATE - creates a new category
+app.post("/hotels/:id/categories", isLoggedIn, function (req, res) {
 	
 	var menuName = req.body.menu.Name;
 	var RestaurantId = req.params.id;

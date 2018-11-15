@@ -1,8 +1,6 @@
-DROP TABLE IF EXISTS review;
-DROP TABLE IF EXISTS room;
-DROP TABLE IF EXISTS suite;
-DROP TABLE IF EXISTS hotel;
-DROP TABLE IF EXISTS user;
+drop database loggedinn;
+create database loggedinn;
+use loggedinn;
 
 -- creation
 CREATE TABLE user (
@@ -35,9 +33,9 @@ CREATE TABLE hotel (
 	Hotel_doctor BOOLEAN NOT NULL
 );
 
-CREATE TABLE suite (
-	Suite_id INT AUTO_INCREMENT PRIMARY KEY,
-	Suite_name Varchar(50) not null,
+CREATE TABLE category (
+	Category_id INT AUTO_INCREMENT PRIMARY KEY,
+	Category_name Varchar(50) not null,
 	Hotel_id INT,
 	FOREIGN KEY(Hotel_id) REFERENCES hotel(Hotel_id) ON DELETE CASCADE
 );
@@ -50,8 +48,8 @@ CREATE TABLE room (
 	Room_breadth INT NOT NULL,
 	Room_price INT not null,
 	Room_accomodates INT not null,
-	Suite_id INT not null,
-	FOREIGN KEY(Suite_id) REFERENCES suite(Suite_id) ON DELETE CASCADE 
+	Category_id INT not null,
+	FOREIGN KEY(Category_id) REFERENCES category(Category_id) ON DELETE CASCADE 
 );
 
 CREATE TABLE review (
@@ -72,14 +70,14 @@ delimiter //
 drop PROCEDURE IF EXISTS onNewHotel//
 CREATE PROCEDURE onNewHotel()
 BEGIN
-   Insert into suite ( Suite_name, Hotel_id) values("Classic Suite", (select max(Hotel_id) from hotel));
+   Insert into category ( Category_name, Hotel_id) values("Buisness rooms", (select max(Hotel_id) from hotel));
 END//
 
-drop procedure IF EXISTS onNewSuite//
-CREATE PROCEDURE onNewSuite()
+drop procedure IF EXISTS onNewCategory//
+CREATE PROCEDURE onNewCategory()
 BEGIN
-	INSERT into room(Room_name, Room_image, Room_length, Room_breadth, Room_price, Room_accomodates, Suite_id) 
-		VALUES("Classic room", "http://dq5r178u4t83b.cloudfront.net/wp-content/uploads/sites/28/2016/11/24091523/New-Luxury-Room.jpg", 50, 50, 2000, 2, (select max(Suite_id) from suite));
+	INSERT into room(Room_name, Room_image, Room_length, Room_breadth, Room_price, Room_accomodates, Category_id) 
+		VALUES("Classic room", "http://dq5r178u4t83b.cloudfront.net/wp-content/uploads/sites/28/2016/11/24091523/New-Luxury-Room.jpg", 50, 50, 2000, 2, (select max(Category_id) from category));
 END//
 
 drop trigger if EXISTS onNewHotelTrigger//
@@ -90,10 +88,11 @@ BEGIN
 CALL onNewHotel();
 END//
 
-drop trigger if EXISTS onNewSuiteTrigger//
-CREATE TRIGGER onNewSuiteTrigger
-AFTER INSERT ON suite
+drop trigger if EXISTS onNewCategoryTrigger//
+CREATE TRIGGER onNewCategoryTrigger
+AFTER INSERT ON category
 FOR EACH ROW
 BEGIN
-CALL onNewSuite();
+CALL onNewCategory();
 END//
+delimiter ;

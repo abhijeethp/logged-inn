@@ -1,9 +1,9 @@
 <% include ../partials/header %>
 <div class="container">
 	<div class="row">
-		<h1 style="text-align: center">Rate <%=restaurant.Name%></h1>
+		<h1 style="text-align: center">Rate <%=hotel.Name%></h1>
 		<div style="width:30%; margin:25px auto">
-			<form action="/restaurants/<%=restaurant.Restaurant_id%>/reviews" method="POST" accept-charset="utf-8">
+			<form action="/hotels/<%=hotel.Hotel_id%>/reviews" method="POST" accept-charset="utf-8">
 				<div class="form-group">
 					<input class="form-control" type="text" name="review[Review]" placeholder="Review">
 				</div>
