@@ -1,28 +1,26 @@
 <% include ../partials/header %>
 <div class="container">
 	<div class="row">
-		<h1 style="text-align: center">Add a new item into <%=menu.Menu_name%> of <%=restaurant.Name%></h1>
+		<h1 style="text-align: center">Add a new room into <%=category.Category_name%> of <%=hotel.Hotel_name%></h1>
 		<div style="width:30%; margin:25px auto">
-			<form action="/restaurants/<%=restaurant.Restaurant_id%>/menus/<%=menu.Menu_id%>/menu_items" method="POST" accept-charset="utf-8">
+			<form action="/hotels/<%=hotel.Hotel_id%>/categories/<%=category.Category_id%>/rooms" method="POST" accept-charset="utf-8">
 				<div class="form-group">
-					<input class="form-control" type="text" name="menuItem[Name]" placeholder="Item name">
+					<input class="form-control" type="text" name="room[Name]" placeholder="room name">
 				</div>
 				<div class="form-group">
-					<input class="form-control" type="text" name="menuItem[Image]" placeholder="Image URL">
-				</div>
-
-				<div class="form-group">
-				<select name="menuItem[Veg]" class="form-control">
-					<option value="1">Veg</option>
-					<option value="0">Non-Veg</option>
-				</select>
-				</div>
-				
-				<div class="form-group">
-					<input class="form-control" type="number" name="menuItem[Price]" placeholder="Price">
+					<input class="form-control" type="text" name="room[Image]" placeholder="Image URL">
 				</div>
 				<div class="form-group">
-					<input class="form-control" type="number" name="menuItem[Serves]" placeholder="Serves">
+					<input class="form-control" type="number" name="room[Length]" placeholder="room length">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="number" name="room[Breadth]" placeholder="room breadth">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="number" name="room[Price]" placeholder="Price (INR)">
+				</div>
+				<div class="form-group">
+					<input class="form-control" type="number" name="room[Accomodates]" placeholder="Accomodates">
 				</div>
 				<div class="form-group">
 					<button class="btn btn-lg btn-primary btn-block">Submit</button>

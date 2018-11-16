@@ -36,13 +36,13 @@ app.use(function (req, res, next) {
 	next();
 });
 
-// ================
+// ================x
 //   INDEX ROUTES
-// ================
+// ================x
 
-// -----------------------x
+// -----------------------
 // ROOT - show index page
-// -----------------------x
+// -----------------------
 app.get("/", function (req, res) {
 	res.render("index");
 });
@@ -51,9 +51,9 @@ app.post("/", function (req, res) {
 	res.redirect("/hotels/"+req.body.lat+"/"+req.body.lng);
 });
 
-// -------x
+// -------
 // LOGIN
-// -------x
+// -------
 
 //show login form
 app.get("/login", function (req, res) {
@@ -73,7 +73,7 @@ app.post("/login", function (req, res) {
 			if(results.length>0){
 				if(results[0].Password == password){
 					req.session.user = results[0];
-					res.redirect("/hotels/new");
+					res.redirect("/");
 				} else {
 					connection.end();
 					res.send("email does not match password");
@@ -86,9 +86,9 @@ app.post("/login", function (req, res) {
 	});
 });
 
-// ---------x
+// ---------
 // REGISTER
-// ---------x
+// ---------
 
 // show form to register
 app.get("/register", function (req, res) {
@@ -134,9 +134,9 @@ app.get("/logout", function (req, res) {
 	res.redirect("/");
 });
 
-// ======================
+// ======================x
 //   HOTELS ROUTES
-// ======================
+// ======================x
 
 // INDEX - show all hotels
 app.get("/hotels/:lat/:lng", function (req, res) {
@@ -197,12 +197,12 @@ app.get("/hotels/:lat/:lng", function (req, res) {
 	});
 });
 
-// NEW - form to create a new restaurant
+// NEW - form to create a new hotel
 app.get("/hotels/new", isLoggedIn, function (req, res) {
 	res.render("hotels/new");
 });
 
-// CREATE - creates a new restaurants
+// CREATE - creates a new hotel
 app.post("/hotels", isLoggedIn, function (req, res) {
 
 	var Name = req.body.hotel.Name;
@@ -236,7 +236,7 @@ app.post("/hotels", isLoggedIn, function (req, res) {
 	});
 });
 
-// SHOW - shows more information about one restaurants 
+// SHOW - shows more information about one hotel
 app.get("/hotels/:id", function (req, res) {
 	
 	hotelId = req.params.id;
@@ -291,7 +291,7 @@ app.get("/hotels/:id", function (req, res) {
 //   REVIEWS ROUTES
 // =================x
 
-// NEW - form to create a new review for the particular restaurant
+// NEW - form to create a new review for the particular hotel
 app.get("/hotels/:id/reviews/new", isLoggedIn, function (req, res) {
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
@@ -338,9 +338,9 @@ app.post("/hotels/:id/reviews", isLoggedIn, function (req, res) {
 	});
 });
 
-// ================
-//   MENU ROUTES
-// ================
+// =================x
+//   CATEGORY ROUTES
+// =================x
 
 // NEW - form to create a new category for the particular hotel
 app.get("/hotels/:id/categories/new", isLoggedIn, function (req, res) {
@@ -368,83 +368,82 @@ app.get("/hotels/:id/categories/new", isLoggedIn, function (req, res) {
 // CREATE - creates a new category
 app.post("/hotels/:id/categories", isLoggedIn, function (req, res) {
 	
-	var menuName = req.body.menu.Name;
-	var RestaurantId = req.params.id;
+	var categoryName = req.body.category.Name;
+	var hotelId = req.params.id;
 	
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if (err1) { console.log(err1); } 
 		else {
 			
-			var values = [[menuName, RestaurantId]];
-			var queryFields = "Menu_name, Restaurant_id";
-			var query = "INSERT INTO menu("+queryFields+") VALUES ?";
+			var values = [[categoryName, hotelId]];
+			var queryFields = "Category_name, Hotel_id";
+			var query = "INSERT INTO category("+queryFields+") VALUES ?";
 			
 			connection.query(query, [values], function (err2, results, fields) {
 				if (err2) { console.log(err2); } else {
-					console.log("menu created");
+					console.log("category created");
 					connection.end();
-					res.redirect("/restaurants/"+RestaurantId);
+					res.redirect("/hotels/"+hotelId);
 				}
 			});
 		}
 	});
 });
 
-// DELETE - Deletes an existing menu
-app.delete("/restaurants/:restaurantId/menus/:menuId", isLoggedIn, function (req, res) {
+// DELETE - Deletes an existing category
+app.delete("/hotels/:hotelId/categories/:categoryId", isLoggedIn, function (req, res) {
 	
-	var restaurantId = req.params.restaurantId;
-	var menuId = req.params.menuId;
+	var hotelId = req.params.hotelId;
+	var categoryId = req.params.categoryId;
 
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if (err1) { console.log(err1); } 
 		else {
 
-			query = "DELETE FROM menu WHERE Menu_id="+menuId;
+			query = "DELETE FROM category WHERE Category_id="+categoryId;
 			connection.query(query, function (err2, results, fields) {
 				if (err2) { console.log(err2); } else {
-					console.log("menu deleted");
+					console.log("category deleted");
 					connection.end();
-					res.redirect("/restaurants/"+restaurantId);
+					res.redirect("/hotels/"+hotelId);
 				}
 			});
 		}
 	});
 });
 
-// ===================
-//   MENU_ITEM ROUTES
-// ===================
+// ===================x
+//   ROOM ROUTES
+// ===================x
 
 // NEW - form to create a new menu_item for a particular restaurant
-app.get("/restaurants/:restaurantId/menus/:menuId/menu_items/new", isLoggedIn, function (req, res) {
+app.get("/hotels/:hotelId/categories/:categoryId/rooms/new", isLoggedIn, function (req, res) {
 	
-	var restaurantId = req.params.restaurantId;
-	var menuId = req.params.menuId;
+	var hotelId = req.params.hotelId;
+	var categoryId = req.params.categoryId;
 
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if (err1) { console.log(err1); } 
 		else {
 			
-			var query1 = "SELECT * FROM restaurant WHERE Restaurant_id = "+restaurantId;
-			connection.query(query1, function (err2, Restaurants, fields) {
+			var query1 = "SELECT * FROM hotel WHERE Hotel_id = "+hotelId;
+			connection.query(query1, function (err2, hotels, fields) {
 				if (err2) { console.log(err2); } else {
-					if(Restaurants.length<=0){
-						res.send("restaurant does not exist");
+					if(hotels.length<=0){
+						res.send("hotel does not exist");
 					} else {
-
-						var query2 = "SELECT * FROM menu WHERE Menu_id = " + menuId;
-						connection.query(query2, function (err3, menus, fields) {
+						var query2 = "SELECT * FROM category WHERE Category_id = " + categoryId;
+						connection.query(query2, function (err3, categories, fields) {
 							if(err3){ console.log(err3); } else {
-								if(menus.length <= 0){
+								if(categories.length <= 0){
 									connection.end();
-									res.send("menu does not exist");
+									res.send("category does not exist");
 								} else {
 									connection.end();
-									res.render("menu_items/new",{restaurant:Restaurants[0], menu:menus[0]});
+									res.render("rooms/new",{hotel:hotels[0], category:categories[0]});
 								}
 							} 
 						});
@@ -455,32 +454,32 @@ app.get("/restaurants/:restaurantId/menus/:menuId/menu_items/new", isLoggedIn, f
 	});
 });
 
-// CREATE - creates a new menu_item for a particular restaurant
-app.post("/restaurants/:restaurantId/menus/:menuId/menu_items", isLoggedIn, function (req, res) {
+// CREATE - creates a new room for a particular hotel in a particular category
+app.post("/hotels/:hotelId/categories/:categoryId/rooms", isLoggedIn, function (req, res) {
 	
-	var restaurantId = req.params.restaurantId;
-	var menuId = req.params.menuId;
+	var hotelId = req.params.hotelId;
+	var categoryId = req.params.categoryId;
 
-	var Name = req.body.menuItem.Name;
-	var Image = req.body.menuItem.Image;
-	var Veg = req.body.menuItem.Veg;
-	console.log("diet-"+Veg);
-	var Price = req.body.menuItem.Price;
-	var Serves = req.body.menuItem.Serves;
+	var name = req.body.room.Name;
+	var image = req.body.room.Image;
+	var length = req.body.room.Length; 
+	var breadth = req.body.room.Breadth; 
+	var price = req.body.room.Price; 
+	var accomodates = req.body.room.Accomodates;
 
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if(err1){ console.log(err1); }
 		else{
-			var values =[[Name, Image, Veg, Price, Serves, menuId]];
-			var queryFields = "Name, Image, Veg, Price, Serves, Menu_id";
-			var query = "INSERT INTO menu_item("+queryFields+") VALUES ?";
+			var values =[[name, image, length, breadth, price, accomodates, categoryId]];
+			var queryFields = "Room_name, Room_image, Room_length, Room_breadth, Room_price, Room_accomodates, Category_id";
+			var query = "INSERT INTO room("+queryFields+") VALUES ?";
 
 			connection.query(query, [values], function (err2, results, fields) {
 				if (err2) { console.log(err2); } else {
-					console.log("menu_item added");
+					console.log("room added");
 					connection.end();
-					res.redirect("/restaurants/"+restaurantId);
+					res.redirect("/hotels/"+hotelId);
 				}
 			});
 		}
@@ -488,23 +487,22 @@ app.post("/restaurants/:restaurantId/menus/:menuId/menu_items", isLoggedIn, func
 
 });
 
-// DELETE - Deletes an existing menu
-app.delete("/restaurants/:restaurantId/menus/:menuId/menu_items/:menuItemId", function (req, res) {
-	var restaurantId = req.params.restaurantId;
-	var menuId = req.params.menuId;
-	var menuItemId = req.params.menuItemId;
+// DELETE - Deletes an existing room
+app.delete("/hotels/:hotelId/categories/:categoryId/rooms/:roomId", function (req, res) {
+	var hotelId = req.params.hotelId;
+	var roomId = req.params.roomId;
 
 	var connection = mysql.createConnection(connectionObject);
 	connection.connect(function (err1) {
 		if (err1) { console.log(err1); } 
 		else {
 
-			query = "DELETE FROM menu_item WHERE Menu_item_id="+menuItemId;
+			query = "DELETE FROM room WHERE Room_id="+roomId;
 			connection.query(query, function (err2, results, fields) {
 				if (err2) { console.log(err2); } else {
-					console.log("menu item deleted");
+					console.log("room deleted");
 					connection.end();
-					res.redirect("/restaurants/"+restaurantId);
+					res.redirect("/hotels/"+hotelId);
 				}
 			});
 		}
@@ -512,9 +510,9 @@ app.delete("/restaurants/:restaurantId/menus/:menuId/menu_items/:menuItemId", fu
 
 });
 
-// =================
+// =================x
 //   AUTH FUNCTION
-// =================
+// =================x
 function isLoggedIn (req, res, next) {
 	if(req.session.user){
 		return next();
@@ -523,9 +521,9 @@ function isLoggedIn (req, res, next) {
 	}
 }
 
-// ================
+// ================x
 //   RUN SERVER
-// ================
+// ================x
 app.listen(8080, function () {
 	console.log("FPP server is running")
 });

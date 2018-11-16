@@ -3,10 +3,10 @@
 
 	<div class="bigger ui segment grid">
 
-		<div class="rlogo ui centered row"><img class="ui medium rounded image" src="<%=restaurant.Logo%>"></div>
+		<div class="rlogo ui centered row"><img class="ui medium rounded image" src="<%=hotel.Hotel_logo%>"></div>
 		<div class="ui centered row">
 			<div class="ui centered segment vertically divided grid">
-				<div class="ui centered row"><h1><%=hotel.Name%></h1></div>
+				<div class="ui centered row"><h1><%=hotel.Hotel_name%></h1></div>
 				<div class="ui centered row"><p><%=hotel.Hotel_description%></p></div>
 				<div class="ui centered row">
 					<% for(var i=0; i<hotel.Hotel_rating; i++) {%>
@@ -47,37 +47,29 @@
 		<div class="ui top attached segment">
 			<div class="ui divided items">
 
-				<% category.rooms.forEach( function(room, index2) { %> // TODO - work from here
+				<% category.rooms.forEach( function(room, index2) { %> 
 					<div class="item">
 						
 						<div class="ui small image">
-							<img src="<%=menuItem.Image%>">
+							<img src="<%=room.Room_image%>">
 						</div>
 						
 						<div class="content pro">
 							<p class="header">
-								<%=menuItem.Name%>
+								<%=room.Room_name%>
 								<% if(currentUser) { %>
-								<form action="/restaurants/<%=restaurant.Restaurant_id%>/menus/<%=menu.Menu_id%>/menu_items/<%=menuItem.Menu_item_id%>?_method=DELETE" method="POST" style="display:inline">
-	 								<button class="ui red button">DELETE ITEM</button>
+								<form action="/hotels/<%=hotel.Hotel_id%>/categories/<%=category.Category_id%>/rooms/<%=room.Room_id%>?_method=DELETE" method="POST" style="display:inline">
+	 								<button class="ui red button">DELETE ROOM</button>
 	 							</form>	
 	 							<% }%>
 
 							</p>
 							<div class="description">
-								<p>Price:&nbsp;&nbsp;&nbsp;<span><i class="fa fa-inr" aria-hidden="true"></i></span><%=menuItem.Price%></p>
-								<p><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Serves:&nbsp;&nbsp;<%=menuItem.Serves%> people</p>
+								<p>Price:&nbsp;&nbsp;&nbsp;<span><i class="fa fa-inr" aria-hidden="true"></i></span><%=room.Room_price%> / night</p> 
+								<p><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Accomodates:&nbsp;&nbsp;<%=room.Room_accomodates%> people</p>
 							</div>
 							<div class="extra">
-							<% if(menuItem.Veg == 0){ %>
-								<div class="non_veg">
-									<span class="red dot">●</span>Non Veg
-								</div>
-							<% } else { %>
-								<p class="veg">
-									<span class="green dot">●</span>Veg
-								</p>
-							<% } %>
+								<i class="fas fa-bed"></i> size:&nbsp;<%=room.Room_length * room.Room_breadth%>
 							</div>
 						</div>
 
@@ -89,7 +81,7 @@
 		</div>
 	<% });%>
 	<% if(currentUser) { %>
-		<a id="new_menu" href="/restaurants/<%=restaurant.Restaurant_id%>/menus/new" class="ui green button"> Add a new menu! </a>
+		<a id="new_category" href="/hotels/<%=hotel.Hotel_id%>/categories/new" class="ui green button"> Add a new category! </a>
 	<% } %>
 </div>
 
@@ -99,7 +91,7 @@
 		
 
 	<div class="ui divided items">
-	<% restaurant.reviews.forEach(function (review, index2) { %>
+	<% hotel.reviews.forEach(function (review, index2) { %>
 		<div class="item">
 			<div class="content">
 				<div class="header"><%=review.Fname%></div>
@@ -107,22 +99,22 @@
     				<div class="cinema"><%=review.niceDate%></div>
     			</div>
 				<div class="meta">
-        			<% for(var i=0; i<review.Rating; i++) {%>
-						<span class="fa fa-star checked"></span>
+        			<% for(var i=0; i<review.Review_rating; i++) {%>
+						<span class="checked">★</span>
 					<% } %>
-					<% for(var i=0; i<(5-review.Rating); i++) { %>
-						<span class="fa fa-star"></span>
+					<% for(var i=0; i<(5-review.Review_rating); i++) { %>
+						<span>★</span>
 					<% } %>
      			</div>
      			<div class="description">
-       				<p><%=review.Review%></p>
+       				<p><%=review.Review_text%></p>
     			</div>
 			</div>
 		</div>
 		<% }); %>
 	</div>
 
-	<a href="/restaurants/<%=restaurant.Restaurant_id%>/reviews/new" class="ui green button">
+	<a href="/hotels/<%=hotel.Hotel_id%>/reviews/new" class="ui green button">
 		Leave a review!
 	</a>
 </div>
@@ -133,7 +125,7 @@
 		margin-right: 5px;
 		margin-left: 5px;
 	}
-.ui .medium.rounded.image{
+	.ui .medium.rounded.image{
 		width: 15em;
 		height: 15em;
 		border:2px solid rgba(255, 255, 255,0.5);
@@ -141,11 +133,13 @@
 	.rlogo.ui.centered.row{
 		padding-bottom: 0;
 	}
-	#new_menu{
+	#new_category{
 		margin-top: .8%;
 	}
-	.bigger.ui.segment.grid{
-		background-image: url("https://ae01.alicdn.com/kf/HTB1tyOQSXXXXXaXXXXXq6xXFXXXg/Custom-retro-wallpaper-Pizza-Coffee-Cake-3D-cartoon-murals-for-the-cafe-restaurant-hotel-background-wall.jpg");
+	.bigger.ui.segment.grid {
+		background-image: url("https://wallpaper.wiki/wp-content/uploads/2017/05/wallpaper.wiki-Panoramic-Beach-Background-Download-PIC-WPD001376-1024x320.jpg");
+		background-repeat: no-repeat;
+		background-size: cover;
 	}
 </style>
 
