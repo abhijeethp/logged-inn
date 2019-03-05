@@ -1,15 +1,14 @@
 <% include ./partials/header %>
 <div class="container">
 
-  <p class="script"><span>Welcome to</span></p>
   <p class="shadow text2">LOGGED.INN</p>
-  <p class="script"><span>Abhijeeth Padarthi - Abhishek Konkal</span></p>
+  <br/>
   
-  
+<p id="maphint" class="btn center-block" style="font-size:30px">locate area to find hotels</p>
 <div id="map"></div>
-<p id="maphint" class="text4">locate area to find hotels</p>
+<br/><br/>
 <form id="submitLocationForm" name="submitLocationForm" action="/" method="POST" >
-  <input type="submit" name="submit" />
+  <input type="submit" class="btn btn-lg btn-primary center-block"  name="submit" />
 </form>
 <script>
   var map, marker;
@@ -137,6 +136,10 @@
     height: 350px;
     width: 350px;
     background-color: grey;
+  }
+
+  #submit{
+    margin:auto;
   }
 
   #maphint {

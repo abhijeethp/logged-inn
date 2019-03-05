@@ -186,7 +186,6 @@ app.get("/hotels/:lat/:lng", function (req, res) {
 							setTimeout(done, 50);
 						}, 
 						function (notAborted2) {
-							console.log(JSON.stringify(finalHotels));
 							connection.end();
 							res.render("hotels/index",{hotels: finalHotels});
 						});
@@ -268,12 +267,10 @@ app.get("/hotels/:id", function (req, res) {
 								var done = this.async();
 								setTimeout(done, 50);
 							}, function (notAborted) {
-								
 								var query4 = "SELECT r.*,DATE_FORMAT(r.Review_date,'%d/%m/%Y') AS niceDate, u.Fname  FROM review r, USER u WHERE r.Hotel_id = "+hotel.Hotel_id+" and r.User_id = u.User_id";
 								connection.query(query4, function (err5, reviews, fields4) {
 									if (err5) { console.log(err5) } else {
 										hotel.reviews = reviews;
-										console.log(JSON.stringify(hotel));
 										connection.end();
 										res.render("hotels/show", {hotel:hotel});
 									}
@@ -525,7 +522,7 @@ function isLoggedIn (req, res, next) {
 //   RUN SERVER
 // ================x
 app.listen(8080, function () {
-	console.log("FPP server is running")
+	console.log("server is running")
 });
 
 

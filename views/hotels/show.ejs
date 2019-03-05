@@ -65,11 +65,18 @@
 
 							</p>
 							<div class="description">
-								<p>Price:&nbsp;&nbsp;&nbsp;<span><i class="fa fa-inr" aria-hidden="true"></i></span><%=room.Room_price%> / night</p> 
+								<p>Price:&nbsp;&nbsp;&nbsp;<span><i class="fa fa-inr" aria-hidden="true"></i></span><%=room.Room_price%> / day</p> 
 								<p><i class="fa fa-users" aria-hidden="true"></i>&nbsp;&nbsp;Accomodates:&nbsp;&nbsp;<%=room.Room_accomodates%> people</p>
 							</div>
 							<div class="extra">
-								<i class="fas fa-bed"></i> size:&nbsp;<%=room.Room_length * room.Room_breadth%>
+								<i class="fas fa-bed"></i> size:&nbsp;<%=room.Room_length * room.Room_breadth%> 
+								<form >
+									<span style="font-size:10px">FROM : </span>
+									<input type="date" name="from" class="form-control input-sm" style="width:150px;display:inline"/> 
+									<span style="font-size:10px">TO : </span> 
+									<input type="date" name="to" class="form-control input-sm" style="width:150px;display:inline"/>  
+									<input type="submit" value="book"/>
+								</form>
 							</div>
 						</div>
 
